@@ -4,7 +4,7 @@
 
 > eg:查看 openstack01.zoushiwen.com 到 openstack10.zoushiwen.com 能否ping通
 ~~~
-zoujiangtao:~$ xre.py openstack[1-10].zoushiwen.com
+zoujiangtao:~$ python xre.py openstack[1-10].zoushiwen.com
 openstack01.zoushiwen.com DOWN
 openstack02.zoushiwen.com DOWN
 openstack03.zoushiwen.com DOWN
