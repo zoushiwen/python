@@ -4,41 +4,31 @@ import subprocess
 import re
 import os.path
 
+
 def getIndex(host):
-    res = host.split('.')
+    regx = re.compile(r'(.+)?\[(.*)\](.*)?')
+    re_host = regx.match(host)
+    start_domain, host_range, end_domain = re_host.group(1), re_host.group(2), re_host.group(3)
+    separator = re.search('\W+', host_range).group()
     realHost = list()
-    first, end = None, None
-    for i in res:
-        if '-' in i:
-            j = i.split('-')
-            for m in j:
-                if '[' in m:
-                    try:
-                        first = int(m.split('[')[1])
-                    except ValueError as e:
-                        print(e.message)
-                        sys.exit(1)
-                elif ']' in m:
-                    try:
-                        end = int(m.split(']')[0])
-                    except ValueError as e:
-                        print(e.message)
-                        sys.exit(1)
-                else:
-                    pass
-            if end < first:
-                print("The index value must {} greater than {}.".format(end,first))
-                sys.exit(1)
-            if end and first is not None:
-                res1 = host.split('[')[0]
-                res2 = host.split(']')[1]
-                for i in range(first, end):
-                    if i < 10:
-                        resHost = res1 + '0' + str(i) + res2
-                    else:
-                        resHost = res1 + str(i) + res2
-                    realHost.append(resHost)
-                return realHost
+    try:
+        first, end = int(host_range.split(separator)[0]),int(host_range.split(separator)[1])
+    except ValueError as e:
+        print(e.message)
+        sys.exit(1)
+
+    if end < first:
+        print("The index value must {} greater than {}.".format(end,first))
+        sys.exit(1)
+
+    for i in range(first, end):
+        if i < 10:
+            resHost = start_domain + '{:0d}'.format(0) + str(i) + end_domain
+        else:
+            resHost = start_domain + str(i) + end_domain
+        realHost.append(resHost)
+
+    return realHost
 
 def check_alive(ip_list, count=1, timeout=1):
     suceessFile = os.path.join(os.path.expanduser('~'), 'success_hosts')
