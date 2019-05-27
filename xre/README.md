@@ -1,3 +1,8 @@
+### ENV
+
+- system:  Macos
+- version: python2 or python3
+
 ### Usage
 
 批量查看多台机器是否ping通，并把成功的机器和失败的机器分别各自文件中
