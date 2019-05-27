@@ -82,7 +82,7 @@ if __name__ == '__main__':
     try:
         host = sys.argv[1]
     except IndexError as e:
-        print e.message
+        print (e.message)
         sys.exit(1)
 
     realHost = getIndex(host)
