@@ -29,8 +29,6 @@ def getIndex(host):
             if end < first:
                 print("The index value must {} greater than {}.".format(end,first))
                 sys.exit(1)
-
-
             if end and first is not None:
                 res1 = host.split('[')[0]
                 res2 = host.split(']')[1]
@@ -45,10 +43,8 @@ def getIndex(host):
 def check_alive(ip_list, count=1, timeout=1):
     suceessFile = os.path.join(os.path.expanduser('~'), 'success_hosts')
     failFile = os.path.join(os.path.expanduser('~'), 'fail_hosts')
-
     success_ip,fail_ip = list(),list()
     for ip in ip_list:
-
         cmd = 'ping -c %d -t %d  %s' % (count, timeout, ip)
 
         p = subprocess.Popen(cmd,
@@ -59,14 +55,17 @@ def check_alive(ip_list, count=1, timeout=1):
                              )
 
         result = p.stdout.read()
-        regex = re.findall('0.0% packet loss', result)
-        if len(regex) != 0:
-            print "\033[32m%s UP\033[0m" % (ip)
-            success_ip.append(ip + '\n')
-        else:
+        if len(result) == 0:
             print "\033[31m%s DOWN\033[0m" % (ip)
             fail_ip.append(ip + '\n')
-
+        else:
+            regex = re.findall('100.0% packet loss', result)
+            if len(regex) != 0:
+                print "\033[31m%s DOWN\033[0m" % (ip)
+                fail_ip.append(ip + '\n')
+            else:
+                print "\033[32m%s UP\033[0m" % (ip)
+                success_ip.append(ip + '\n')
     fileOption(suceessFile,success_ip)
     fileOption(failFile,fail_ip)
 
@@ -75,7 +74,6 @@ def fileOption(file,contents):
     with open(file,'w+') as f:
         for content in contents:
             f.writelines(content)
-
 
 if __name__ == '__main__':
 
