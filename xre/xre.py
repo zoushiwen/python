@@ -22,12 +22,8 @@ def getIndex(host):
         sys.exit(1)
 
     for i in range(first, end):
-        if i < 10:
-            resHost = start_domain + '{:0d}'.format(0) + str(i) + end_domain
-        else:
-            resHost = start_domain + str(i) + end_domain
+        resHost = ''.join([start_domain,'{:02d}'.format(i),end_domain])
         realHost.append(resHost)
-
     return realHost
 
 def check_alive(ip_list, count=1, timeout=1):
