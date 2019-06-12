@@ -1,8 +1,11 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 
 import os
 import sys
 
+#清理 dir 目录下的.pyc文件
 def cleanPyc(dir):
     if os.path.isdir(dir):
         for dirs,subdirs,files in os.walk(dir):
